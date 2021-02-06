@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
-    Transform ballTransform;
-
     [SerializeField]
     float moveSpeed = 10.0f;
 
@@ -16,7 +14,7 @@ public class AIController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void MoveUpdate(Transform ballTransform)
     {
         if(!ballTransform)
         {

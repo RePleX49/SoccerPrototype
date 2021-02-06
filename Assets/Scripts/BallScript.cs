@@ -14,6 +14,7 @@ public class BallScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        Services.ball = this;
     }
 
     void OnTriggerEnter(Collider other)

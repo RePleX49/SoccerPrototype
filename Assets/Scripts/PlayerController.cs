@@ -35,12 +35,13 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-            cc = GetComponent<CharacterController>();
-            //GameObject cameraObject = Instantiate(cameraPrefab, transform.position, transform.rotation);
-            //CameraController camController = cameraObject.GetComponent<CameraController>();
+        cc = GetComponent<CharacterController>();
+        //GameObject cameraObject = Instantiate(cameraPrefab, transform.position, transform.rotation);
+        //CameraController camController = cameraObject.GetComponent<CameraController>();
 
-            //camController.target = transform;
-            //cameraTransform = cameraObject.transform;
+        //camController.target = transform;
+        //cameraTransform = cameraObject.transform;
+        Services.player = this;
     }
 
     // Update is called once per frame
