@@ -12,10 +12,16 @@ public class GameManager : MonoBehaviour
     public float defaultTimeLimit = 10.0f;
     public Text scoreText;
     public Text timerText;
+    public GameObject menuPanel;
+    public GameObject scorePanel;
+    public GameObject gameOverPanel;
+    GameObject[] uiPanels;
 
     void Awake()
     {
         InitializeServices();
+        uiPanels = new GameObject[]{ menuPanel, scorePanel, gameOverPanel };
+        ShowMenuPanel();
     }
 
     void InitializeServices()
@@ -35,7 +41,7 @@ public class GameManager : MonoBehaviour
         if(Services.gameStateController.CurrentState.GetType() == typeof(StateGameInProgress))
         {
             Services.AIManager.Update();
-        }     
+        }
     }
 
     public void OnDestroy()
@@ -46,5 +52,29 @@ public class GameManager : MonoBehaviour
     public void BeginGame()
     {
         Services.eventManager.FireEvent(new StartGame());
+    }
+
+    public void ShowScorePanel()
+    {
+        ClearPanels();
+        scorePanel.SetActive(true);
+    }
+
+    public void ShowGameOverPanel()
+    {
+        ClearPanels();
+        gameOverPanel.SetActive(true);
+    }
+
+    public void ShowMenuPanel()
+    {
+        ClearPanels();
+        menuPanel.SetActive(true);
+    }
+
+    void ClearPanels()
+    {
+        foreach (GameObject panel in uiPanels)
+            panel.SetActive(false);
     }
 }

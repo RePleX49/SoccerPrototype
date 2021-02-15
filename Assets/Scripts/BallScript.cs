@@ -30,5 +30,14 @@ public class BallScript : MonoBehaviour
 
             Debug.Log("Kicked");
         }
+        else if(other.gameObject.CompareTag("Red Goal"))
+        {
+            // TODO use a dot product check that we are entering the goal
+            Services.eventManager.FireEvent(new GoalScored(true));
+        }
+        else if(other.gameObject.CompareTag("Blue Goal"))
+        {
+            Services.eventManager.FireEvent(new GoalScored(false));
+        }
     }
 }

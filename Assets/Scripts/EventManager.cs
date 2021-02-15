@@ -66,3 +66,5 @@ public class GoalScored : SGEvent
 }
 
 public class StartGame : SGEvent { }
+
+public class GameOver :SGEvent { }

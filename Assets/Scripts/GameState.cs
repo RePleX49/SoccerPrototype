@@ -22,13 +22,23 @@ public class GameState
     {
         Services.eventManager.RegisterListener<GoalScored>(UpdateScore);
         Services.eventManager.RegisterListener<StartGame>(OnStartGame);
+        Services.eventManager.RegisterListener<GameOver>(OnGameOver);
         CurrentState = TransitionState<StateMenu>();
     }
 
     void OnStartGame(SGEvent e)
     {
         ResetGameTime();
+        Services.gameManager.ShowScorePanel();
+        redScore = 0;
+        blueScore = 0;
+        SetScoreText(redScore, blueScore);
         PendingState = TransitionState<StateGameInProgress>();
+    }
+
+    void OnGameOver(SGEvent e)
+    {
+        Services.gameManager.ShowGameOverPanel();
     }
 
     public void Update()
@@ -67,6 +77,7 @@ public class GameState
 
     public TState TransitionState<TState>() where TState : State
     {
+        // check if we already created instance of newState
         var type = typeof(TState);
         if (stateCache.TryGetValue(type, out var state))
         {
@@ -84,8 +95,6 @@ public class GameState
         return newState;
     }
 
-    
-
     public void UpdateScore(SGEvent e)
     {
         var goalEvent = (GoalScored)e;
@@ -99,14 +108,19 @@ public class GameState
             blueScore++;
         }
 
-        Services.gameManager.scoreText.text = string.Format("Red: {0}   Blue: {1}", redScore, blueScore);
+        SetScoreText(redScore, blueScore);
 
         float scoreThreshold = Services.gameManager.scoreThreshold;
         if(redScore >= scoreThreshold || blueScore >= scoreThreshold)
         {
             PendingState = TransitionState<StateGameOver>();
         }
-    }  
+    }
+
+    public void SetScoreText(int red, int blue)
+    {
+        Services.gameManager.scoreText.text = string.Format("Red: {0}   Blue: {1}", red, blue);
+    }
 }
 
 public abstract class State
@@ -146,6 +160,6 @@ public class StateGameOver : State
     public override void OnEnter()
     {
         base.OnEnter();
-        // Show game over screen
+        Services.eventManager.FireEvent(new GameOver());
     }
 }
