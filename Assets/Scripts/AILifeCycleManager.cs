@@ -20,17 +20,18 @@ public class AILifeCycleManager
         }    
     }
 
-    // Update is called once per frame
+    // called by GameManager
     public void Update()
     {
         foreach(AIController ai in AIPlayers)
         {
-            if(!Services.ball)
+            // checkout if ball is still in play
+            if (!Services.Ball)
             {
                 break;
             }
 
-            ai.MoveUpdate(Services.ball.transform);
+            ai.MoveUpdate(Services.Ball.transform);
         }
     }
 
