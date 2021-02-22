@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     public int numberOfAIToSpawn = 5;
     public AIController AIPrefab;
+    public AIController refereePrefab;
     public Transform[] SpawnLocations;
     public int scoreThreshold = 3;
     public float defaultTimeLimit = 10.0f;
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
         // allow us to define order of initialization
         Services.gameManager = this;
         Services.InitializeServices();
-        Services.AIManager.Initialize(numberOfAIToSpawn, AIPrefab);
+        Services.AIManager.Initialize(numberOfAIToSpawn, AIPrefab, refereePrefab);
         Services.gameStateController.Initialize();
     }
 
@@ -37,11 +38,6 @@ public class GameManager : MonoBehaviour
     public void Update()
     {
         Services.gameStateController.Update();
-
-        if(Services.gameStateController.CurrentState.GetType() == typeof(StateGameInProgress))
-        {
-            Services.AIManager.Update();
-        }
     }
 
     public void OnDestroy()

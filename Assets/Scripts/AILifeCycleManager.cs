@@ -6,10 +6,11 @@ public class AILifeCycleManager
 {   
     List<AIController> AIPlayers;
 
-    public void Initialize(int numToSpawn, AIController AIPrefab)
+    public void Initialize(int numToSpawn, AIController AIPrefab, AIController refereePrefab)
     {
         AIPlayers = new List<AIController>();
         CreateAI(numToSpawn, AIPrefab);
+        AIPlayers.Add(Object.Instantiate(refereePrefab, Services.gameManager.SpawnLocations[0]));
     }
 
     public void CreateAI(int numToSpawn, AIController AIPrefab)
@@ -31,7 +32,7 @@ public class AILifeCycleManager
                 break;
             }
 
-            ai.MoveUpdate(Services.Ball.transform);
+            ai.MoveUpdate();
         }
     }
 

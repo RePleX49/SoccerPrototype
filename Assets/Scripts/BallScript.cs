@@ -7,6 +7,7 @@ public class BallScript : MonoBehaviour
 {
     Rigidbody rb;
 
+    Vector3 initialPosition;
     [SerializeField]
     float launchForce = 8.0f;
   
@@ -14,7 +15,9 @@ public class BallScript : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        initialPosition = transform.position;
         Services.Ball = this;
+        Services.eventManager.RegisterListener<GoalScored>(ResetPosition);
     }
 
     void OnTriggerEnter(Collider other)
@@ -39,5 +42,15 @@ public class BallScript : MonoBehaviour
         {
             Services.eventManager.FireEvent(new GoalScored(false));
         }
+    }
+
+    void ResetPosition(SGEvent e)
+    {
+        transform.position = initialPosition;
+    }
+
+    private void OnDestroy()
+    {
+        Services.eventManager.UnRegisterListener<GoalScored>(ResetPosition);
     }
 }

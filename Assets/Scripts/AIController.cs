@@ -6,20 +6,32 @@ using UnityEngine;
 public class AIController : MonoBehaviour
 {
     [SerializeField]
-    float moveSpeed = 10.0f;
+    protected float moveSpeed = 10.0f;
 
-    Rigidbody rb;
+    protected Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
+    {
+        Initialize();
+    }
+
+    protected virtual void Initialize()
     {
         rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
-    public void MoveUpdate(Transform ballTransform)
+    public virtual void MoveUpdate()
     {
-        if(!ballTransform)
+        SimpleMoveToBall();
+    }
+
+    protected virtual void SimpleMoveToBall()
+    {
+        Transform ballTransform = Services.Ball.transform;
+
+        if (!ballTransform)
         {
             return;
         }
@@ -31,5 +43,13 @@ public class AIController : MonoBehaviour
 
         Vector3 newPosition = rb.position + (transform.forward * moveSpeed * Time.deltaTime);
         rb.MovePosition(newPosition);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Entity"))
+        {
+            Services.eventManager.FireEvent(new Fouled());
+        }
     }
 }

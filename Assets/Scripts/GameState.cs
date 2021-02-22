@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using UnityEngine;
-using UnityEngine.Animations;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class GameState
 {
@@ -152,6 +149,7 @@ public class StateGameInProgress : State
     {
         base.Update();
         Parent.UpdateGameTime(Time.deltaTime);
+        Services.AIManager.Update();
     }
 }
 
