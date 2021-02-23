@@ -10,14 +10,14 @@ public class AILifeCycleManager
     {
         AIPlayers = new List<AIController>();
         CreateAI(numToSpawn, AIPrefab);
-        AIPlayers.Add(Object.Instantiate(refereePrefab, Services.gameManager.SpawnLocations[0]));
+        AIPlayers.Add(Object.Instantiate(refereePrefab, Services.gameManager.SpawnLocations[0].position, Quaternion.identity));
     }
 
     public void CreateAI(int numToSpawn, AIController AIPrefab)
     {
         for (int i = 0; i < numToSpawn; i++)
         {
-            AIPlayers.Add(Object.Instantiate(AIPrefab, Services.gameManager.SpawnLocations[i]));
+            AIPlayers.Add(Object.Instantiate(AIPrefab, Services.gameManager.SpawnLocations[i].position, Quaternion.identity));
         }    
     }
 
@@ -34,6 +34,28 @@ public class AILifeCycleManager
 
             ai.MoveUpdate();
         }
+    }
+
+    public AIController GetClosestToBall()
+    {
+        AIController closestPlayer = AIPlayers[0];
+
+        float closestDistance = int.MaxValue;
+        Transform ballTransform = Services.Ball.transform;
+
+        foreach(AIController ai in AIPlayers)
+        {
+            float distance = ai.transform.position.x * ballTransform.position.x
+                + ai.transform.position.y * ballTransform.position.y
+                + ai.transform.position.z * ballTransform.position.z;
+            if(distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestPlayer = ai;
+            }
+        }
+
+        return closestPlayer; 
     }
 
     public void DestroyAI()

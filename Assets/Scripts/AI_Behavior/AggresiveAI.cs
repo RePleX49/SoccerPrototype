@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class AggresiveAI : MonoBehaviour
+public class AggresiveAI : AIController
 {
-    public float moveSpeed = 5.0f;
-    Rigidbody rb;
+    public float avoidDistance = 5.0f;
     BehaviorTree.Tree<AggresiveAI> behaviorTree;
 
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        Initialize();
         var BallInPlay = new Tree<AggresiveAI>
         (
             new Sequence<AggresiveAI>
             (
                 new IsBallActive(),
+                new CheckDistanceToBall(),
                 new MoveToBall()
             )
         );
@@ -32,21 +32,15 @@ public class AggresiveAI : MonoBehaviour
         );
     }
 
+    public override void MoveUpdate()
+    {
+        BehaviorUpdate();
+    }
+
     // Update is called once per frame
     void BehaviorUpdate()
     {
         behaviorTree.Update(this);
-    }
-
-    public void MoveToBall()
-    {
-        //find the ball direction and set forward
-        Vector3 ballDirection = Services.Ball.transform.position - transform.position;
-        ballDirection.y = 0.0f;
-        transform.forward = ballDirection;
-
-        Vector3 newPosition = rb.position + (transform.forward * moveSpeed * Time.deltaTime);
-        rb.MovePosition(newPosition);
     }
 }
 
@@ -62,7 +56,19 @@ public class MoveToBall : BehaviorTree.Node<AggresiveAI>
 {
     public override bool Update(AggresiveAI context)
     {
-        context.MoveToBall();
+        context.SimpleMoveToBall();
         return true; // maybe return false on fail to move to?
+    }
+}
+
+public class CheckDistanceToBall : BehaviorTree.Node<AggresiveAI>
+{
+    public override bool Update(AggresiveAI context)
+    {
+        float distance = Vector3.Distance(context.transform.position, Services.Ball.transform.position);
+        if (distance < context.avoidDistance)
+            return false;
+        else
+            return true;
     }
 }

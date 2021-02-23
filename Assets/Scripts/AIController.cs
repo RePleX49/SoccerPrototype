@@ -27,7 +27,7 @@ public class AIController : MonoBehaviour
         SimpleMoveToBall();
     }
 
-    protected virtual void SimpleMoveToBall()
+    public virtual void SimpleMoveToBall()
     {
         Transform ballTransform = Services.Ball.transform;
 
