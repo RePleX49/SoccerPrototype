@@ -9,6 +9,7 @@ public class AIController : MonoBehaviour
     protected float moveSpeed = 10.0f;
 
     protected Rigidbody rb;
+    public BallEffect ballAbility;
 
     // Start is called before the first frame update
     void Start()
