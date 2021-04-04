@@ -5,11 +5,21 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class AIController : MonoBehaviour
 {
+    public enum PlayerAbility
+    { 
+        Freeze,
+        Burn
+    }
+
     [SerializeField]
     protected float moveSpeed = 10.0f;
 
     protected Rigidbody rb;
+
+    public PlayerAbility abilityTag;
     public BallEffect ballAbility;
+
+    bool isFrozen = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +30,13 @@ public class AIController : MonoBehaviour
     protected virtual void Initialize()
     {
         rb = GetComponent<Rigidbody>();
+
+        switch(abilityTag)
+        {
+            case PlayerAbility.Freeze:
+                ballAbility = new FreezeEffect();
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -32,7 +49,7 @@ public class AIController : MonoBehaviour
     {
         Transform ballTransform = Services.Ball.transform;
 
-        if (!ballTransform)
+        if (!ballTransform || isFrozen)
         {
             return;
         }
@@ -53,4 +70,11 @@ public class AIController : MonoBehaviour
             Services.eventManager.FireEvent(new Fouled());
         }
     }
+
+    public void Freeze(float duration) 
+    { 
+        isFrozen = true;
+        Invoke("UnFreeze", duration);
+    }
+    public void UnFreeze() { isFrozen = false; }
 }

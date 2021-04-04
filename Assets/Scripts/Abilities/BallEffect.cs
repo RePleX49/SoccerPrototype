@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallEffect : MonoBehaviour
+public class BallEffect
 {
-    public ParticleSystem particleFX;
-    public AudioClip impactSound;
-
-    public void Activate()
+    public void Activate(AIController effectTarget)
     {
-        particleFX.Play();
+        ApplyEffect(effectTarget);
     }
 
-    public virtual void ApplyEffect()
-    {
+    protected virtual void ApplyEffect(AIController effectTarget) { }
+}
 
+// This isn't very non-Tech designer friendly
+// Would benefit from being turned into Monobehavior and effects made as prefabs
+public class FreezeEffect : BallEffect
+{
+    public float freezeDuration = 1.2f;
+
+    protected override void ApplyEffect(AIController effectTarget)
+    {
+        effectTarget.Freeze(freezeDuration);
     }
 }

@@ -6,15 +6,19 @@ using UnityEngine;
 public class BallScript : MonoBehaviour
 {
     Rigidbody rb;
+    AudioSource audioSource;
 
     Vector3 initialPosition;
     [SerializeField]
     float launchForce = 8.0f;
+
+    BallEffect currentEffect;
   
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
         initialPosition = transform.position;
         Services.Ball = this;
         Services.eventManager.RegisterListener<GoalScored>(ResetPosition);
@@ -24,6 +28,18 @@ public class BallScript : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Entity"))
         {
+            AIController targetController = other.gameObject.GetComponent<AIController>();
+
+            if (currentEffect == null)
+            {
+                currentEffect = targetController.ballAbility;
+                Debug.Log("Set effect " + currentEffect);
+            }
+            else
+            {
+                currentEffect.Activate(targetController);
+            }
+
             Transform otherTransform = other.gameObject.transform;
 
             Vector3 launchDir = transform.position - otherTransform.position;
