@@ -1876,7 +1876,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387a15ebb39710f4aad817ed82c8ac50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfAIToSpawn: 5
+  numberOfAIToSpawn: 2
   AIPrefab: {fileID: 1621455967290120117, guid: c8c4276f75d22e64981f7c442e050144, type: 3}
   refereePrefab: {fileID: 6741525494230057286, guid: 52cb614786fc8974798e2e6fc52d7a2b, type: 3}
   SpawnLocations:

@@ -12,7 +12,7 @@ public class BallScript : MonoBehaviour
     [SerializeField]
     float launchForce = 8.0f;
 
-    BallEffect currentEffect;
+    BallAbility activeAbility;
   
     // Start is called before the first frame update
     void Start()
@@ -30,14 +30,16 @@ public class BallScript : MonoBehaviour
         {
             AIController targetController = other.gameObject.GetComponent<AIController>();
 
-            if (currentEffect == null)
+            // Set the reference of whichever player's ability is active on the ball
+            if (activeAbility == null)
             {
-                currentEffect = targetController.ballAbility;
-                Debug.Log("Set effect " + currentEffect);
+                activeAbility = targetController.GetBallAbility();
+                Debug.Log(activeAbility.gameObject);
+                Debug.Log("Set effect " + activeAbility);
             }
             else
             {
-                currentEffect.Activate(targetController);
+                activeAbility.Activate(targetController);
             }
 
             Transform otherTransform = other.gameObject.transform;

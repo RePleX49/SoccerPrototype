@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  abilityTag: 0
+  abilityPrefab: {fileID: 8041498656083597835, guid: d68dde18d98a08a41a83361a44deca71, type: 3}
   avoidDistance: 0
 --- !u!136 &1621455967290120115
 CapsuleCollider:

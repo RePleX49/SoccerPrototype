@@ -5,19 +5,15 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class AIController : MonoBehaviour
 {
-    public enum PlayerAbility
-    { 
-        Freeze,
-        Burn
-    }
-
     [SerializeField]
     protected float moveSpeed = 10.0f;
 
     protected Rigidbody rb;
 
-    public PlayerAbility abilityTag;
-    public BallEffect ballAbility;
+    [SerializeField]
+    public BallAbility abilityPrefab;
+
+    protected BallAbility playerAbility;
 
     bool isFrozen = false;
 
@@ -31,11 +27,10 @@ public class AIController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        switch(abilityTag)
+        if(abilityPrefab)
         {
-            case PlayerAbility.Freeze:
-                ballAbility = new FreezeEffect();
-                break;
+            playerAbility = Instantiate(abilityPrefab, transform);
+            playerAbility.Initialize();
         }
     }
 
@@ -71,10 +66,14 @@ public class AIController : MonoBehaviour
         }
     }
 
+    public BallAbility GetBallAbility() { return playerAbility; }
+
     public void Freeze(float duration) 
     { 
         isFrozen = true;
+        Debug.Log("Frozen");
         Invoke("UnFreeze", duration);
     }
+
     public void UnFreeze() { isFrozen = false; }
 }
